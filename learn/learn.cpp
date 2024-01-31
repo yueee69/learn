@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include <string.h>
 #include <time.h>
 #include <windows.h>
@@ -8,12 +8,11 @@
 using namespace std;
 
 double start;
-string tasklist[6];//任務格子
 int score = 0, dechp = 10, incsc = 1, constime = 2;
 
 struct combat
 {
-	string weap[6];//背包格子
+	string weap[6] = { "" };//背包格子
 	int atk = 20, def = 5, matk = 20, mdef = 5, hp = 500;
 } enemy, player;
 
@@ -216,163 +215,6 @@ public:
 	}
 };
 
-/////////////////////////////////////////////////
-class weapon
-{
-public:
-	string tem = {};
-	int tematk = 0, temmatk = 0, temdef = 0, temmdef = 0, temhp=0, bs=0;
-	short w = 0, x = 0, y = 0;
-	void randweapon() {
-		short r = 0;
-		r = rand() % 100 + 1;//25%普通裝備,7%稀有,3%傳說
-		if (r <= 25) {
-			string normal[7] = { "長劍","鐵甲","刺客短刃","生命之戒","鞋子","吸血鬼獠牙","黑暗玉璽" };
-			r = rand() % 8;
-			switch (r) {
-			case 1: {
-				tem = normal[0];
-				tematk += 10;
-				break;
-			}
-			case 2: {
-				tem = normal[1];
-				temdef += 10;
-				break;
-			}
-			case 3: {
-				tem = normal[2];
-				tematk += 7, temmatk += 7;
-				break;
-			}
-			case 4: {
-				tem = normal[3];
-				temhp += 20;
-				break;
-			}
-			case 5: {
-				tem = normal[4];
-				tematk += 4, temmatk += 4, temdef += 4, temmdef += 4, temhp+=10;
-				break;
-			}
-			case 6: {
-				tem = normal[5];
-				bs += 10;
-				break;
-			}
-			case 7: {
-				tem = normal[6];
-				temmatk += 15;
-				break;
-			}
-			}
-		}
-		else if (r <= 32) {
-			string rare[8] = { "吸血鬼權杖","正午箭筒","殘暴之力","閃耀劍","爐縛之斧","鐵刺之鞭","荊棘胸甲","護衛之盾" };
-			r = rand() % 8;
-			switch (r) {
-			case 1: {
-				tem = rare[0];
-
-				break;
-			}
-			case 2: {
-				tem = rare[1];
-				break;
-			}
-			case 3: {
-				tem = rare[2];
-				break;
-			}
-			case 4: {
-				tem = rare[3];
-				break;
-			}
-			case 5: {
-				tem = rare[4];
-				break;
-			}
-			case 6: {
-				tem = rare[5];
-				break;
-			}
-			case 7: {
-				tem = rare[6];
-				break;
-			}
-			case 8: {
-				tem = rare[7];
-				break;
-			}
-			}
-		}
-		else if (r <= 35) {
-			string legend[9] = { "死亡之帽","妖夢鬼刀","冷卻之靴","嗜血者","靈魂竊取者","蘭頓之兆","振奮盔甲","聖裂之杖","海妖殺手" };
-			r = rand() % 9;
-			switch (r) {
-			case 1: {
-				tem = legend[0];
-				break;
-			}
-			case 2: {
-				tem = legend[1];
-				break;
-			}
-			case 3: {
-				tem = legend[2];
-				break;
-			}
-			case 4: {
-				tem = legend[3];
-				break;
-			}
-			case 5: {
-				tem = legend[4];
-				break;
-			}
-			case 6: {
-				tem = legend[5];
-				break;
-			}
-			case 7: {
-				tem = legend[6];
-				break;
-			}
-			case 8: {
-				tem = legend[7];
-				break;
-			}
-			case 9: {
-				tem = legend[8];
-				break;
-			}
-			}
-		}
-	}
-	void WeaponToPlayer() {
-		while (x != 6) {
-			while (player.weap[w] != "空") {//任務欄是否空
-				w++;
-			}
-			if (x <= 5) {
-				player.weap[w] = tem;
-			}
-			else break;
-		}
-	}
-	void WeaponToEnemy() {
-		while (y != 6) {
-			while (enemy.weap[w] != "空") {//任務欄是否空
-				w++;
-			}
-			if (y <= 5) {
-				enemy.weap[w] = tem;
-			}
-			else break;
-		}
-	}
-};
-//////////////////////////////////////////////////
 
 void Help() {
 	kb kb;
@@ -424,12 +266,6 @@ void Help() {
 			setcolor(3);
 			cout << "任務系統";
 			setcolor();
-			cout << "(詳細可看/task)" << endl;
-			cout << "與";
-			setcolor(3);
-			cout << "裝備系統(詳細可看/weaponinfo)";
-			setcolor();
-			cout << "來增加遊戲的可玩性！\n" << endl;
 			setcolor(3);
 			cout << "製作這個遊戲的動機：" << endl;
 			setcolor();
@@ -469,16 +305,6 @@ void Help() {
 			kb.esc();
 			Help();
 		}
-		else if (help == "rdw") {
-			system("cls");
-			weapon w;
-			bag b;
-			w.randweapon();
-			b.slot();
-			cout << "按esc返回上一頁";
-			kb.esc();
-			Help();
-		}
 		else if (help == "end") {
 			break;
 		}
@@ -493,62 +319,46 @@ void Help() {
 	}
 }
 
-void randtask() {
-	short t, w = 0;
-	system("cls");
-	srand(time(NULL));
-	t = rand() % 4 + 1;
-	while (tasklist[w] != "空" && w < 6) {//任務欄是否空
-		w++;
-	}
-	for (short n = 0; n <= 5; n++)
-		cout << "slot" << n + 1 << ":" << tasklist[n] << endl;
-	switch (t) {
-	case1: {
 
-		}
-	}
-}
 
 void type() {
 	short n = 0, round = 0, r = 0;
 	double usetime = 0;
 	kb kb;
 	bag bag;
-	weapon w;
 	kb.start();
 	restart();
+	const string s[] = { "123","456","789","012" };
+	string question = {};
+	string typein = {};
 	while (player.hp > 0 && enemy.hp > 0) {
 		start = GetTickCount64();
-		const string s[] = { "abc","def","ghi","jkl" };
 		srand(time(NULL));
 		n = rand() % 4;
-		char question[4];
-		strcpy_s(question, s[n].c_str());
+		question.clear();
+		typein.clear();
+		question = s[n];
 		system("cls");
 		round++;
-		char typein[4] = { 0 };
 		cout << question << "\tscore:" << score << "\thp:" << player.hp << "\tround:" << round << "\t敵人血量:" << enemy.hp << endl;
 		while (1) {
 			cin >> typein;
-			if ((strcmp(typein, "/help") == 0)) {
+			cin.ignore();
+			if (typein == "/help") {
 				Help();
 				restart();
 				cout << question << "\tscore:" << score << "\thp:" << player.hp << "\tround:" << round << "\t敵人血量:" << enemy.hp << endl;
 			}
-			else if ((strcmp(typein, "/bag") == 0)) {//呼叫背包
+			else if (typein == "/bag") {//呼叫背包
 				bag.slot();
 				restart();
 				cout << question << "\tscore:" << score << "\thp:" << player.hp << "\tround:" << round << "\t敵人血量:" << enemy.hp << endl;
 			}
-			else if ((strcmp(typein, "/task") == 0)) {
-				randtask();
-			}
-			else if ((strcmp(typein, "/gamemode") == 0)) {//作弊清單
+			else if (typein == "/gamemode") {//作弊清單
 				gamemode();
 				cout << question << "\tscore:" << score << "\thp:" << player.hp << "\tround:" << round << "\t敵人血量:" << enemy.hp << endl;
 			}
-			else if ((strcmp(question, typein) == 0))
+			else if (typein == question)
 				break;
 		}
 		double end = GetTickCount64();
@@ -560,33 +370,15 @@ void type() {
 			if (player.matk > player.atk)
 				enemy.hp -= player.matk - enemy.mdef;
 			else enemy.hp -= player.atk - enemy.def;
-			r = rand() % 100 + 1;
-			if (r <= 20) {
-				w.randweapon();
-				w.WeaponToPlayer();
-			}
 		}
-		else if (enemy.matk > enemy.atk) {
-			player.hp -= enemy.matk - player.mdef;
-			r = rand() % 100 + 1;
-			if (r <= 20) {
-				w.randweapon();
-				w.WeaponToEnemy();
-			}
-		}
-		else {
-			player.hp -= enemy.atk - player.def;
-			r = rand() % 100 + 1;
-			if (r <= 20) {
-				w.randweapon();
-				w.WeaponToEnemy();
-			}
-		}
+		else
+			player.hp -= 100;
 	}
-	system("cls");
-	cout << (player.hp >= 0 ? "你贏了！\n遊戲結束！" : "您死了！\n遊戲結束！") << endl;
-	setcolor();
-	system("pause");
+		system("cls");
+		cout << (player.hp >= 0 ? "你贏了！\n遊戲結束！" : "您死了！\n遊戲結束！") << endl;
+		setcolor();
+		system("pause");
+	
 }
 
 int main() {
@@ -594,7 +386,6 @@ int main() {
 	for (short n = 0; n < 6; n++) {
 		player.weap[n].append("空");
 		enemy.weap[n].append("空");
-		tasklist[n].append("空");
 	}
 	type();
 }
